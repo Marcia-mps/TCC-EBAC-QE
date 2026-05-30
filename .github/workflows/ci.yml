@@ -1,0 +1,28 @@
+name: TCC EBAC QE - CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Validar estrutura do projeto
+        run: |
+          echo "Validando estrutura do projeto TCC-EBAC-QE"
+          test -d UI
+          test -d API
+          test -d Mobile
+          test -d Performance
+          test -d docs
+          test -d .github/workflows
+          echo "Estrutura validada com sucesso"
