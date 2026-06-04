@@ -9,20 +9,69 @@ on:
       - main
 
 jobs:
-  validate-project:
+  ui-tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout do repositório
         uses: actions/checkout@v4
 
-      - name: Validar estrutura do projeto
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências UI
+        working-directory: UI
+        run: npm install
+
+      - name: Executar testes UI com Cypress
+        working-directory: UI
+        run: npm test
+
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências API
+        working-directory: API
+        run: npm install
+
+      - name: Executar testes API com Supertest
+        working-directory: API
+        run: npm test
+
+  performance-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar K6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Executar teste de performance com K6
+        working-directory: Performance
+        run: k6 run performance-test.js
+
+  mobile-structure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Validar estrutura Mobile
         run: |
-          echo "Validando estrutura do projeto TCC-EBAC-QE"
-          test -d UI
-          test -d API
-          test -d Mobile
-          test -d Performance
-          test -d docs
-          test -d .github/workflows
-          echo "Estrutura validada com sucesso"
+          test -f Mobile/mobile-tests.md
+          test -f Mobile/wdio.conf.js
+          echo "Estrutura Mobile validada com sucesso"
