@@ -25,14 +25,6 @@ jobs:
         working-directory: UI
         run: npm install
 
-      - name: Instalar binário do Cypress
-        working-directory: UI
-        run: npx cypress install
-
-      - name: Verificar Cypress
-        working-directory: UI
-        run: npx cypress verify
-
       - name: Executar testes UI com Cypress
         working-directory: UI
         run: npx cypress run --browser electron
